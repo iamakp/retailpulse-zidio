@@ -14,7 +14,7 @@
 ## 🚀 Live Demo
 
 🔗 **[RetailPulse Dashboard →](https://retailpulse-zidio.streamlit.app)**  
-📹 **[Demo Video (YouTube) →](https://youtube.com)**
+
 
 ---
 
