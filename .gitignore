@@ -1,0 +1,56 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Data – never commit raw/large files
+data/raw/
+data/processed/
+*.csv
+*.xlsx
+*.parquet
+
+# Models – use MLflow instead
+models/
+*.pkl
+*.joblib
+*.pt
+*.pth
+
+# Secrets
+.env
+*.env
+secrets/
+
+# MLflow
+mlruns/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Reports
+reports/*.html

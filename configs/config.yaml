@@ -1,0 +1,76 @@
+project:
+  name: RetailPulse
+  version: "2.0"
+  author: Abhishek Kumar Prajapati
+
+data:
+  raw_path: data/raw/online_retail.csv
+  processed_path: data/processed/
+  external_path: data/external/
+  kaggle_dataset: "mashlyn/online-retail-ii-uci"  # UCI Online Retail II
+
+features:
+  rfm:
+    recency_col: InvoiceDate
+    monetary_col: TotalPrice
+    customer_col: Customer ID
+  rolling_windows: [7, 14, 30]
+  lag_features: [1, 7, 14, 30]
+
+segmentation:
+  kmeans:
+    n_clusters: 6
+    random_state: 42
+    max_iter: 300
+  dbscan:
+    eps: 0.5
+    min_samples: 5
+
+forecasting:
+  horizon_days: 30
+  prophet:
+    yearly_seasonality: true
+    weekly_seasonality: true
+    daily_seasonality: false
+    changepoint_prior_scale: 0.05
+  lstm:
+    sequence_length: 30
+    hidden_size: 128
+    num_layers: 2
+    dropout: 0.2
+    epochs: 50
+    batch_size: 32
+    learning_rate: 0.001
+  ensemble:
+    prophet_weight: 0.5
+    lstm_weight: 0.5
+
+churn:
+  target_col: churned
+  inactive_days: 90
+  xgboost:
+    n_estimators: 500
+    max_depth: 6
+    learning_rate: 0.05
+    subsample: 0.8
+    colsample_bytree: 0.8
+    use_label_encoder: false
+    eval_metric: auc
+    random_state: 42
+  threshold: 0.5
+
+inventory:
+  safety_stock_factor: 1.645   # 95% service level
+  lead_time_days: 7
+
+mlflow:
+  tracking_uri: mlruns/
+  experiment_name: RetailPulse
+
+database:
+  postgres_url: postgresql://user:password@localhost:5432/retailpulse
+  redis_url: redis://localhost:6379/0
+
+monitoring:
+  drift_threshold: 0.1
+  retraining_trigger: psi_score > 0.2

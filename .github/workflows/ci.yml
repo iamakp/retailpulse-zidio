@@ -1,0 +1,54 @@
+name: RetailPulse CI/CD
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install ruff black pytest pytest-cov
+
+      - name: Lint with ruff
+        run: ruff check src/ tests/
+
+      - name: Format check with black
+        run: black --check src/ tests/
+
+      - name: Run tests
+        run: pytest tests/ -v --cov=src --cov-report=xml
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./coverage.xml
+
+  build-docker:
+    needs: lint-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -f docker/Dockerfile -t retailpulse:latest .
+
+      - name: Test Docker image
+        run: docker run --rm -d -p 8501:8501 --name rp-test retailpulse:latest
+          && sleep 10
+          && curl -f http://localhost:8501/_stcore/health
+          && docker stop rp-test
