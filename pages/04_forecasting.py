@@ -44,12 +44,14 @@ def load_daily():
         daily["y"] = daily["y"].clip(upper=cap)
         return daily
     
-    # In-memory mock dataframe backup with version-safe NumPy clipping syntax
+    # NumPy version-agnostic baseline array initialization (100% safe across Python 3.14 / NumPy 2.x)
     np.random.seed(42)
     mock_dates = pd.date_range(start="2025-01-01", periods=180, freq="D")
+    raw_signal = np.random.normal(loc=25000, scale=4000, size=180)
+    
     return pd.DataFrame({
         "ds": mock_dates,
-        "y": np.random.normal(loc=25000, scale=4000, size=180).clip(a_min=5000, a_max=None)
+        "y": np.maximum(5000, raw_signal)
     })
 
 daily = load_daily()
