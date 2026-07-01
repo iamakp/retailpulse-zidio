@@ -13,7 +13,7 @@
 
 ## 🚀 Live Demo
 
-🔗 **[RetailPulse Dashboard →](https://retailpulse-zidio.streamlit.app)**  
+🔗 **[RetailPulse Dashboard →](https://retailpulse-analytics-iamakp.streamlit.app)**  
 
 
 ---
